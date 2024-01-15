@@ -1,0 +1,30 @@
+---
+ - name: Auditbeate
+   hosts: all
+   become: true
+   remote_user: itservices
+
+   tasks:
+   - name: Ansible check directory.
+     stat:
+      path: /etc/auditbeat
+     register: my_folder
+
+   - name: "echo if directory already existed"
+     debug:
+       msg: "the AUDITBEAT directory is already existed"
+     when: my_folder.stat.exists
+
+   - name: "Ansible Create directory if not exists"
+     file:
+      path: /etc/auditbeat
+      state: directory
+      mode: 0755
+      group: itservices
+      owner: itservices
+     when: my_folder.stat.exists == false
+
+   - debug:
+      msg: "Directory was created"
+...
+
