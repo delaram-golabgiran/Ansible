@@ -1,0 +1,24 @@
+---
+ - name: Playbook to install dependencies
+   hosts: all
+   become: true
+   remote_user: root
+
+   tasks:
+    - name: Ansible apt install dependencies
+      apt:
+        name:
+          - sssd
+          - sssd-tools
+          - realmd
+          - libnss-sss
+          - libpam-sss
+          - adcli
+          - samba-common-bin
+          - oddjob
+          - oddjob-mkhomedir
+          - packagekit
+
+        state: present
+      notify:
+        - restart realmd
