@@ -1,0 +1,29 @@
+---
+ - name: create itservices user
+   hosts: all
+   become: true
+   remote_user: << user >>
+
+   vars_prompt:
+     - name: my_user
+       prompt: "what is the user name"
+       private: false
+
+     - name: my_password
+       prompt: "What is user password?"
+       private: true
+
+   tasks:
+     - name: create user
+       ansible.builtin.user:
+         name: "{{ my_user }}"
+         password: "{{ my_password | password_hash('sha512') }}"
+         shell: /bin/bash
+         groups: sudo
+         append: yes
+
+
+
+
+## RUN with -K
+ansible-playbook -i <<File_Name>>.yml -K
